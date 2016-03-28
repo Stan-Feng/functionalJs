@@ -8,3 +8,12 @@
 ## Composition
 * Take an output from one function and pass as input to another function
 * Immutable binding is not interesting, immutable value is more interesting
+* We choose not to change the value of params passed in the function called immutability.
+
+## Recursion (Tail called optimization in JavaScript)
+* No one implement this feature until now
+* Alternative way to doing this:
+
+
+## Closure
+* Closure is when a function remembers the variables around it even when that function is executed elsewhere
