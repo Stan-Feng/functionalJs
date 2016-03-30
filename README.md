@@ -1,5 +1,5 @@
 ## Functional Programming in JavaScript
-### Prue function
+### Pure function
 * No side effects, state
 * Each time the function has been called, you're gonna get different result
 * Closure is about maintaining the state of a function
