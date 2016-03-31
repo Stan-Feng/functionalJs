@@ -24,24 +24,28 @@ var fileState = {
 	"file2": null,
 	"file3": null
 };
-var isCompleted = function () {
-	var completedNum = Object.keys(fileState)
-		.reduce((accu, curr) => (accu + (fileState[curr] ? 1 : 0)), 0);
 
-	return completedNum === 3;
+var responseHandler = function (filename, text) {
+	fileState[filename] = text;
+	console.log(`${filename} done!`);
+
+	var urls = Object.keys(fileState);
+	var completedTasks = Object.keys(fileState).map(name => fileState[name]);
+
+	for (var i = 0; i < completedTasks.length; i++) {
+		if (completedTasks[i]) {
+			delete fileState[urls[i]];
+			console.log(completedTasks[i]);
+		} else {
+			return;
+		}
+	}
+	console.log('Completed!');
 };
 
 function getFile(file) {
 	fakeAjax (file, function (text) {
-		// what do we do here?
-		fileState[file] = text;
-		console.log(`${file} done!`);
-		if (isCompleted()) {
-			Object.keys(fileState).forEach(el => {
-				console.log(fileState[el]);
-			});
-			console.log('Completed!');
-		}
+		responseHandler(file, text);
 	});
 }
 
