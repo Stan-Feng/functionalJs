@@ -22,4 +22,85 @@
   * There are not able to be reasoned about
   * Temporal Dependency, when one thing depends on another thing finished before this thing can go
   * And the only way for callbacks to express temporal dependency is nesting
+  * The problem to your brain does not get the linear progress to the code, non local jump
 * If there's any place that our brain diverges from the way of JavaScript engine works, and that moment for the two diverge, it is that moment that bug happens in our code
+
+#### Thunks
+* from [**Thoughts on Thunks**](https://blog.getify.com/thoughts-on-thunks/), written by Kyle Simpson
+* A thunk is a computation that **hasn't been evaluated yet**.
+* "A synchronous thunk is a function that already has all it needs to its work and return a result" -- Getify
+```js
+function makeThunk(fn, ...args) {
+  return function () {
+    return fn(...args);
+  };
+}
+var meaningOfLie = makeThunk(add, 11, 31);
+meaningOfLie();
+```
+* The value of thunk is a way to **encapsulate the work** necessary to produce some result into a simple wrapper
+* The reason why not directly invoking "add(11, 31)" is that what if "add(11, 31)" will take a really expensive time
+  * You may want to do this work until the result is actually needed.
+* Asynchronous Thunk
+  * which is a thunk that completes its computation asynchronously. To get its result value, requires a single callback arg
+```js
+function makeAsyncThunk (fn, ...args) {
+  return function(cb) {
+    return fn(...args, cb);
+  };
+}
+
+function ask (x, y, cb) {
+  ajax(`https://www.somurl.com/add?x=${x}&y=${y}`, cb);
+}
+
+var meaningOfLie = makeAsyncThunk(ask, 11, 31);
+meaningOfLie(function waitForIt(answer) {
+  console.log(answer);
+});
+```  
+* Consider the asynchronous working flow, what if we want to the thunk evaluating when they're created
+```js
+// Lazy version
+function makeQuestion(x, y, cb) {
+  return function() {
+    ask(x, y, cb);
+  };
+}
+
+// Eager version (Race Condition Here)
+function makeQuestion (x, y, cb) {
+  ask(x, y, function(answer) {
+    ...
+  });
+
+  return function (cb) {
+    ...
+  }
+}
+
+// Eager version
+// There must be two cases exist, "ask" first or "return"
+// Both cases should be considered
+function makeEagerAsyncThunk(fn,...args) {
+  var v = {};
+  var fns = [];
+
+  fn(...args,function (...args){
+    if (!("args" in v)) v.args = args;
+
+    if (fns.length > 0) {
+      while (fns.length > 0) {
+        fns.shift()(...v.args);
+      }
+    }
+  });
+
+  return function (cb) {
+    if ("args" in v) cb(...v.args);
+    else fns.push(cb);
+  };
+}
+```
+* A thunk acts as a wrapper around a future or eventual value that abstracts time component
+* By hiding time as a state, there will no race condition exists
