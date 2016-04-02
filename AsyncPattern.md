@@ -107,4 +107,16 @@ function makeEagerAsyncThunk(fn,...args) {
 * A thunk acts as a wrapper around a future or eventual value that abstracts time component
 * By hiding time as a state, there will no race condition exists
 
-####
+#### Promises
+* Promises **invert the inversion control problem** (The most important point)
+  * All the trust issues have been solved
+* A key different between a library and framework is inversion control
+* **Promises Trust** (Huge Deal):
+  * Only resolved once
+  * Either success OR error
+  * Messages passed/kept
+  * Exceptions become errors
+  * Immutable once resolved
+* The shiny point of trust issues solved is immutability
+  * Action and distances, somebody else faraway can do something that affects you without your knowing
+* Flow Control
