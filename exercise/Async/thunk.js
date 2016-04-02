@@ -36,7 +36,7 @@ function getFile(filename) {
   return function (cb) {
     // fakeAjax callback has been executed
     if (response) {
-      callback(response);
+      cb(response);
     }
     else {
       callback = cb;
@@ -44,37 +44,20 @@ function getFile(filename) {
   };
 }
 
-// State manager object
-var responseText = {
-  "file1": false,
-  "file2": false,
-  "file3": false,
-};
-
-function responseHandler (response) {
-  var text = response.text;
-  var filename = response.filename;
-
-  if (!responseText[filename]) {
-    responseText[filename] = text;
-    // console.log(`${filename} arrived.`);
-  }
-
-  for (var key in responseText) {
-    if (!responseText[key]) {
-      return;
-    } else {
-      console.log(responseText[key]);
-      delete responseText[key];
-    }
-  }
-}
-
 // request all files at once in "parallel"
 var thunk1 = getFile("file1");
 var thunk2 = getFile("file2");
 var thunk3 = getFile("file3");
 
-thunk1(responseHandler);
-thunk2(responseHandler);
-thunk3(responseHandler);
+// The pro of this pattern is avoiding race condition
+// In callback pattern you have to set some global variables to do time order management
+thunk1(function (text1) {
+  output(text1);
+  thunk2(function (text2) {
+    output(text2);
+    thunk3(function (text3) {
+      output(text3);
+      output("Completed.");
+    });
+  });
+});

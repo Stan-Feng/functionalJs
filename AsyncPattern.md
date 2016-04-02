@@ -9,6 +9,8 @@
   * We want task A and task B happen **in the same time**, because we don't want to done task A first then task B which will cause frozen
   * Therefore **Event Loop** was proposed to schedule tasks for better user experience and performance
 * Asynchronous Programming -- managing our concurrency
+* Time is the most complex and hardest part for us to reason about
+* Therefore if we can use these tools. These notions of preserving state with we can compose these values together. Then not worrying about time ordering about time ordering. Time becomes an non-issue.
 
 #### Callback Problems
 * Inversion of control --> There's part of my code that I can control it while there's another part I can't.
@@ -104,3 +106,5 @@ function makeEagerAsyncThunk(fn,...args) {
 ```
 * A thunk acts as a wrapper around a future or eventual value that abstracts time component
 * By hiding time as a state, there will no race condition exists
+
+####
