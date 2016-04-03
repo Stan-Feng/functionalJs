@@ -31,16 +31,16 @@ var promise3 = getFile("file3");
 
 // request all files at once in "parallel"
 promise1
-  .then(function (text) {
-    output(text);
+  .then(output)
+  .then(function () {
     return promise2;
   })
-  .then(function (text) {
-    output(text);
+  .then(output)
+  .then(function () {
     return promise3;
   })
-  .then(function (text) {
-    output(text);
+  .then(output)
+  .then(function () {
     output("Completed!");
   })
   .catch(function (err) {
