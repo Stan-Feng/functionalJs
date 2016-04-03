@@ -32,7 +32,7 @@ var promise3 = getFile("file3");
 // request all files at once in "parallel"
 promise1
   .then(output)
-  .then(function () {
+  .then(function () { // This line ".then" is not on promise1 anymore, it is a brand new promise resolved immediately
     return promise2;
   })
   .then(output)
