@@ -33,7 +33,7 @@ function getFile(file) {
 // but only once previous rendering
 // is done.
 var urls = ['file1', 'file2', 'file3'];
-var promises = urls.map(url => getFile(url));
+var promises = urls.map(getFile);
 var promiseAll = function (promiseArr) {
   promiseArr.reduce(function (accu, curr) {
     return accu

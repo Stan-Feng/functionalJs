@@ -119,4 +119,13 @@ function makeEagerAsyncThunk(fn,...args) {
   * Immutable once resolved
 * The shiny point of trust issues solved is immutability
   * Action and distances, somebody else faraway can do something that affects you without your knowing
-* Flow Control
+* Promise.all, which will move on until all tasks done.
+  * It is called a "gate" in computer science
+  * Whenever you have multiple things happening, the order they finished does not care, but all of them need to be finished before moving on.
+* One abstraction is to think of things in term of sequence
+  * automatically chained promises
+
+#### Generator
+* solving non-locale, non-sequential reasonability problem
+* The functions in Javascript is run-to-complete semantic
+* 
