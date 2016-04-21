@@ -126,6 +126,36 @@ function makeEagerAsyncThunk(fn,...args) {
   * automatically chained promises
 
 #### Generator
-* solving non-locale, non-sequential reasonability problem
+* A pausable function
+* Solving non-locale, non-sequential reasonability problem
 * The functions in Javascript is run-to-complete semantic
-* 
+* While generator does not have this run-to-complete semantic
+* Syntactic form of declaring a state machine
+* Only generator self knows when to pause
+* Synchronously looking our asynchronous
+```js
+  function coroutine (generator) {
+    var iterator = generator();
+
+    return function () {
+      return iterator.next.apply(iterator, arguments);
+    }
+  }
+
+  function fakeAjax (data) {
+    setTimeout(function () {
+      run(data);
+    }, 1000);
+  }
+
+  var run = coroutine(function* () {
+    var x = 1 + (yield fakeAjax(10));
+    var y = 1 + (yield fakeAjax(30));
+
+    var answer = (yield fakeAjax("Meaning of life: " + (x + y)));
+    console.log(answer);
+  });
+
+  run();
+```
+* Solving the inversion of control issue
